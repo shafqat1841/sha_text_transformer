@@ -1,4 +1,5 @@
 use std::env;
+use std::process;
 
 fn main() {
     let app_commands = ["uppercase", "lowercase", "reverse"];
@@ -9,8 +10,9 @@ fn main() {
     println!("{} arguments passed", args_length.to_string());
 
     if args_length != 3 {
-        println!("Wrong number of arguments passed");
-        println!("Usage: cargo run <arg1: Text> <arg2: Command>");
+        eprintln!("Wrong number of arguments passed");
+        eprintln!("Usage: cargo run <arg1: Text> <arg2: Command>");
+        process::exit(1);
     }
 
     let mut command_to_use: Option<String> = None;
@@ -27,8 +29,8 @@ fn main() {
     }
 
     if command_to_use.is_none() {
-        println!("Not valid command {}", user_command);
-        return;
+        eprintln!("Not valid command {}", user_command);
+        process::exit(1);
     }
 
     println!("user_text: {}", user_text);
