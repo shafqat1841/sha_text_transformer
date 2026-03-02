@@ -1,50 +1,18 @@
 use std::env;
 use std::process;
 
-struct UserInput {
-    text: String,
-    command: String,
-}
-
-impl UserInput {
-    fn build(args: Vec<String>) -> UserInput {
-        UserInput {
-            text: args[1].clone(),
-            command: args[2].clone().to_lowercase(),
-        }
-    }
-}
-
-enum AppCommand {
-    Uppercase(String),
-    Lowercase(String),
-    Reverse(String),
-}
-
-fn get_command_to_use(user_input: &UserInput) -> Option<AppCommand> {
-    let mut command_to_use: Option<AppCommand> = None;
-    match user_input.command.as_str() {
-        "uppercase" => command_to_use = Some(AppCommand::Uppercase(user_input.text.clone())),
-        "lowercase" => command_to_use = Some(AppCommand::Lowercase(user_input.text.clone())),
-        "reverse" => command_to_use = Some(AppCommand::Reverse(user_input.text.clone())),
-        _ => {}
-    }
-    command_to_use
-}
-
-fn validate_args(args: &Vec<String>) {
-    let args_length: usize = args.len();
-    if args_length != 3 {
-        eprintln!("Wrong number of arguments passed");
-        eprintln!("Usage: cargo run <arg1: Text> <arg2: Command>");
-        process::exit(1);
-    }
-}
+use text_transformer::{AppCommand, UserInput, get_command_to_use, validate_args};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    validate_args(&args);
+    let is_valid = validate_args(&args);
+
+    if (!is_valid) {
+        eprintln!("Wrong number of arguments passed");
+        eprintln!("Usage: cargo run <arg1: Text> <arg2: Command>");
+        process::exit(1);
+    }
 
     let user_input: UserInput = UserInput::build(args);
     let command_to_use: Option<AppCommand> = get_command_to_use(&user_input);
@@ -61,16 +29,15 @@ fn main() {
     match command_to_use.unwrap() {
         AppCommand::Uppercase(text) => {
             println!("uppercase: {}", text.to_uppercase());
-        },
-         AppCommand::Lowercase(text) => {
+        }
+        AppCommand::Lowercase(text) => {
             println!("lowercase: {}", text.to_lowercase());
-        },
-         AppCommand::Reverse(text) => {
+        }
+        AppCommand::Reverse(text) => {
             let chars = text.chars();
             let reversed_chars = chars.rev();
             let reversed_text: String = reversed_chars.collect();
             println!("reverse: {}", reversed_text);
-        },
+        }
     }
-
 }
