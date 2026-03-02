@@ -8,7 +8,7 @@ fn main() {
 
     let is_valid = validate_args(&args);
 
-    if (!is_valid) {
+    if !is_valid {
         eprintln!("Wrong number of arguments passed");
         eprintln!("Usage: cargo run <arg1: Text> <arg2: Command>");
         process::exit(1);
