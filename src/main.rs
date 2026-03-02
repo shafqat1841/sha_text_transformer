@@ -1,48 +1,76 @@
 use std::env;
 use std::process;
 
-fn main() {
-    let app_commands = ["uppercase", "lowercase", "reverse"];
+struct UserInput {
+    text: String,
+    command: String,
+}
 
-    let args: Vec<String> = env::args().collect();
+impl UserInput {
+    fn build(args: Vec<String>) -> UserInput {
+        UserInput {
+            text: args[1].clone(),
+            command: args[2].clone().to_lowercase(),
+        }
+    }
+}
 
+enum AppCommand {
+    Uppercase(String),
+    Lowercase(String),
+    Reverse(String),
+}
+
+fn get_command_to_use(user_input: &UserInput) -> Option<AppCommand> {
+    let mut command_to_use: Option<AppCommand> = None;
+    match user_input.command.as_str() {
+        "uppercase" => command_to_use = Some(AppCommand::Uppercase(user_input.text.clone())),
+        "lowercase" => command_to_use = Some(AppCommand::Lowercase(user_input.text.clone())),
+        "reverse" => command_to_use = Some(AppCommand::Reverse(user_input.text.clone())),
+        _ => {}
+    }
+    command_to_use
+}
+
+fn validate_args(args: &Vec<String>) {
     let args_length: usize = args.len();
-    println!("{} arguments passed", args_length.to_string());
-
     if args_length != 3 {
         eprintln!("Wrong number of arguments passed");
         eprintln!("Usage: cargo run <arg1: Text> <arg2: Command>");
         process::exit(1);
     }
+}
 
-    let mut command_to_use: Option<String> = None;
+fn main() {
+    let args: Vec<String> = env::args().collect();
 
-    let user_text: &String = &args[1];
-    let user_command: &String = &args[2].to_lowercase();
-    println!("user_command: {}", user_command);
+    validate_args(&args);
 
-    for app_command in app_commands {
-        if app_command == user_command {
-            command_to_use = Some(app_command.to_string());
-            break;
-        }
-    }
+    let user_input: UserInput = UserInput::build(args);
+    let command_to_use: Option<AppCommand> = get_command_to_use(&user_input);
+
+    println!("user_command: {}", user_input.command);
 
     if command_to_use.is_none() {
-        eprintln!("Not valid command {}", user_command);
+        eprintln!("Not valid command {}", user_input.command);
         process::exit(1);
     }
 
-    println!("user_text: {}", user_text);
+    println!("user_text: {}", user_input.text);
 
-    if command_to_use.as_ref().unwrap() == app_commands[0] {
-        println!("uppercase: {}", user_text.to_uppercase());
-    } else if command_to_use.as_ref().unwrap() == app_commands[1] {
-        print!("lowercase: {}", user_text.to_lowercase());
-    } else if command_to_use.as_ref().unwrap() == app_commands[2] {
-        let chars = user_text.chars();
-        let reversed_chars = chars.rev();
-        let reversed_text: String = reversed_chars.collect();
-        print!("reverse: {}", reversed_text);
+    match command_to_use.unwrap() {
+        AppCommand::Uppercase(text) => {
+            println!("uppercase: {}", text.to_uppercase());
+        },
+         AppCommand::Lowercase(text) => {
+            println!("lowercase: {}", text.to_lowercase());
+        },
+         AppCommand::Reverse(text) => {
+            let chars = text.chars();
+            let reversed_chars = chars.rev();
+            let reversed_text: String = reversed_chars.collect();
+            println!("reverse: {}", reversed_text);
+        },
     }
+
 }
