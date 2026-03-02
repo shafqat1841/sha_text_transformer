@@ -1,39 +1,7 @@
-pub struct UserInput {
-    pub text: String,
-    pub command: String,
-}
 
-impl UserInput {
-    pub fn build(args: Vec<String>) -> UserInput {
-        UserInput {
-            text: args[1].clone(),
-            command: args[2].clone().to_lowercase(),
-        }
-    }
-}
+mod user_input_file;
+mod helper_file;
 
-pub enum AppCommand {
-    Uppercase(String),
-    Lowercase(String),
-    Reverse(String),
-}
+pub use crate::user_input_file::user_input_mod::UserInput;
+pub use crate::helper_file::helper_mod::{AppCommand, get_command_to_use, validate_args};
 
-pub fn get_command_to_use(user_input: &UserInput) -> Option<AppCommand> {
-    let mut command_to_use: Option<AppCommand> = None;
-    match user_input.command.as_str() {
-        "uppercase" => command_to_use = Some(AppCommand::Uppercase(user_input.text.clone())),
-        "lowercase" => command_to_use = Some(AppCommand::Lowercase(user_input.text.clone())),
-        "reverse" => command_to_use = Some(AppCommand::Reverse(user_input.text.clone())),
-        _ => {}
-    }
-    command_to_use
-}
-
-pub fn validate_args(args: &Vec<String>) -> bool {
-    let args_length: usize = args.len();
-    if args_length != 3 {
-        false;
-        // process::exit(1);
-    }
-    true
-}
