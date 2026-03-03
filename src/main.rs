@@ -1,32 +1,33 @@
 use std::env;
+use std::env::Args;
 use std::process;
 
-use text_transformer::{AppCommand, UserInput, get_command_to_use, validate_args};
+use text_transformer::{AppCommand, UserInput, get_command_to_use};
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
+    let args: Args = env::args();
 
-    let is_valid = validate_args(&args);
-
-    if !is_valid {
+    if args.len() != 3 {
         eprintln!("Wrong number of arguments passed");
         eprintln!("Usage: cargo run <arg1: Text> <arg2: Command>");
         process::exit(1);
     }
 
-    let user_input: UserInput = UserInput::build(args);
-    let command_to_use: Option<AppCommand> = get_command_to_use(&user_input);
+    let user_input: UserInput = UserInput::build(args).unwrap_or_else(|err| {
+        eprintln!("Error: {}", err);
+        process::exit(1);
+    });
+
+    let command_to_use: AppCommand = get_command_to_use(&user_input).unwrap_or_else(|err| {
+        eprintln!("Error: {}", err);
+        process::exit(1);
+    });
 
     println!("user_command: {}", user_input.command);
 
-    if command_to_use.is_none() {
-        eprintln!("Not valid command {}", user_input.command);
-        process::exit(1);
-    }
-
     println!("user_text: {}", user_input.text);
 
-    match command_to_use.unwrap() {
+    match command_to_use {
         AppCommand::Uppercase(text) => {
             println!("uppercase: {}", text.to_uppercase());
         }
