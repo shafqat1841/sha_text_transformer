@@ -8,19 +8,14 @@ pub mod helper_mod {
         Reverse(String),
     }
     
-    pub fn get_command_to_use(user_input: &UserInput) -> Option<AppCommand> {
-        let mut command_to_use: Option<AppCommand> = None;
+    // pub fn get_command_to_use(user_input: &UserInput) -> Option<AppCommand> {
+    pub fn get_command_to_use(user_input: &UserInput) -> Result<AppCommand, &'static str> {
         match user_input.command.as_str() {
-            "uppercase" => command_to_use = Some(AppCommand::Uppercase(user_input.text.clone())),
-            "lowercase" => command_to_use = Some(AppCommand::Lowercase(user_input.text.clone())),
-            "reverse" => command_to_use = Some(AppCommand::Reverse(user_input.text.clone())),
-            _ => {}
+            "uppercase" => return Ok(AppCommand::Uppercase(user_input.text.clone())),
+            "lowercase" => return Ok(AppCommand::Lowercase(user_input.text.clone())),
+            "reverse" => return Ok(AppCommand::Reverse(user_input.text.clone())),
+            _ => return Err("Not valid command"),
         }
-        command_to_use
-    }
-    
-    pub fn validate_args(args: &[String]) -> bool {
-        args.len() == 3
     }
 }
 
