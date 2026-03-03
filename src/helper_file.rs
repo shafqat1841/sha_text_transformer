@@ -20,11 +20,7 @@ pub mod helper_mod {
     }
     
     pub fn validate_args(args: &Vec<String>) -> bool {
-        let args_length: usize = args.len();
-        if args_length != 3 {
-            false;
-        }
-        true
+        args.len() == 3
     }
 }
 
