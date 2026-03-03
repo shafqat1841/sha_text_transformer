@@ -18,14 +18,10 @@ fn main() {
         process::exit(1);
     });
 
-    let command_to_use: AppCommand = get_command_to_use(&user_input).unwrap_or_else(|err| {
+    let command_to_use: AppCommand = get_command_to_use(user_input).unwrap_or_else(|err| {
         eprintln!("Error: {}", err);
         process::exit(1);
     });
-
-    println!("user_command: {}", user_input.command);
-
-    println!("user_text: {}", user_input.text);
 
     match command_to_use {
         AppCommand::Uppercase(text) => {
