@@ -19,7 +19,7 @@ pub mod helper_mod {
         command_to_use
     }
     
-    pub fn validate_args(args: &Vec<String>) -> bool {
+    pub fn validate_args(args: &[String]) -> bool {
         args.len() == 3
     }
 }
