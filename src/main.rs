@@ -2,7 +2,7 @@ use std::env;
 use std::env::Args;
 use std::process;
 
-use text_transformer::{AppCommand, UserInput, get_command_to_use};
+use text_transformer::{AppCommand, UserInput};
 
 fn main() {
     let args: Args = env::args();
@@ -18,10 +18,11 @@ fn main() {
         process::exit(1);
     });
 
-    let command_to_use: AppCommand = get_command_to_use(user_input).unwrap_or_else(|err| {
-        eprintln!("Error: {}", err);
-        process::exit(1);
-    });
+    let command_to_use: AppCommand =
+        AppCommand::get_command_to_use(user_input).unwrap_or_else(|err| {
+            eprintln!("Error: {}", err);
+            process::exit(1);
+        });
 
-    println!("{}",command_to_use);
+    println!("{}", command_to_use);
 }
