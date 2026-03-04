@@ -6,5 +6,8 @@ use text_transformer::run;
 fn main() {
     let args: Args = env::args();
 
-    run(args);
+    if let Err(err) = run(args) {
+        eprintln!("Error: {}", err);
+        std::process::exit(1);
+    }
 }
