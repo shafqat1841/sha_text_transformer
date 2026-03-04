@@ -23,18 +23,5 @@ fn main() {
         process::exit(1);
     });
 
-    match command_to_use {
-        AppCommand::Uppercase(text) => {
-            println!("uppercase: {}", text.to_uppercase());
-        }
-        AppCommand::Lowercase(text) => {
-            println!("lowercase: {}", text.to_lowercase());
-        }
-        AppCommand::Reverse(text) => {
-            let chars = text.chars();
-            let reversed_chars = chars.rev();
-            let reversed_text: String = reversed_chars.collect();
-            println!("reverse: {}", reversed_text);
-        }
-    }
+    println!("{}",command_to_use);
 }
