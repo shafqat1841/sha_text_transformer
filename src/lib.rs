@@ -4,7 +4,7 @@ mod user_input_file;
 pub use crate::helper_file::AppCommand;
 pub use crate::user_input_file::UserInput;
 
-pub fn run(args: std::env::Args) -> Result<(), &'static str> {
+pub fn run(args: &mut std::env::Args) -> Result<(), &'static str> {
     if args.len() != 3 {
         eprintln!("Usage: cargo run <arg1: Text> <arg2: Command>");
         return Err("Wrong number of arguments passed");
