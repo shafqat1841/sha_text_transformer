@@ -7,7 +7,7 @@ pub struct UserInput {
 }
 
 impl UserInput {
-    pub fn build(mut args: Args) -> Result<UserInput, &'static str> {
+    pub fn build(args: &mut Args) -> Result<UserInput, &'static str> {
         args.next();
         let text = match args.next() {
             Some(arg) => arg,
